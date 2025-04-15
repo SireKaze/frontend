@@ -4,6 +4,7 @@ import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
 
 
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface ButtonActionProps {npm: any
   onClick: () => void;
   isLoading?: boolean;

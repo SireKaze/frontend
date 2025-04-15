@@ -8,6 +8,7 @@ interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   style?: React.CSSProperties;
+  isLoading?: boolean; 
 }
 
 const Button: React.FC<ButtonProps> = ({

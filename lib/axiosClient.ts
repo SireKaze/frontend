@@ -15,3 +15,8 @@ export interface BaseResponsePagination {
     total: number;
   };
 }
+
+export interface BaseResponseSuccess {
+  success: boolean;
+  message: string;
+}
