@@ -11,8 +11,11 @@ export default withAuth(
       req.nextUrl.pathname.startsWith("/admin") &&
       req.nextauth.token?.user?.role !== "admin"
     ) {
-      return NextResponse.redirect(new URL("/member", req.url));
+      // return NextResponse.redirect(new URL("/member", req.url));
+      return NextResponse.rewrite(new URL("/access", req.url));
     }
+
+    return NextResponse.next(); //jika tidak ada token maka redirect ke halaman login
     
 
     //tempat kodingnya
