@@ -11,7 +11,7 @@ const Admin = () => {
 
   useEffect(() => {
     if (status === "authenticated" && session?.user.role !== "admin") {
-      router.push("/"); // Redirect to home or another page if not an admin
+      router.push("/access"); // Redirect to home or another page if not an admin
     }
   }, [status, session, router]);
 
@@ -40,6 +40,13 @@ const Admin = () => {
             }}
             colorSchema="blue"
             title="Logout"
+          />
+            <Button
+            onClick={() => {
+              router.push('/book');
+            }}
+            colorSchema="green"
+            title="Go to Book Page"
           />
         </>
       )}

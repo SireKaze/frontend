@@ -34,6 +34,7 @@ const useBookModule = () => {
   };
 
   // Fungsi untuk mendapatkan detail buku
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getDetailBook = async (id: string): Promise<any> => {
     const response = await axiosClient.get(`/book/detail/${id}`);
     console.log("Fetched Book Detail:", response.data); // Log the fetched book detail

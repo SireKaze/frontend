@@ -1,30 +1,51 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
- 
-export default withAuth(
-  // `withAuth` augments your `Request` with the user's token.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function middleware(req:any) {
-    console.log("token", req.nextauth.token);
 
-    if (
-      req.nextUrl.pathname.startsWith("/admin") &&
-      req.nextauth.token?.user?.role !== "admin"
-    ) {
-      // return NextResponse.redirect(new URL("/member", req.url));
-      return NextResponse.rewrite(new URL("/access", req.url));
+export default withAuth(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function middleware(req: any) {
+    const token = req.nextauth?.token;
+
+    // Jika tidak ada token, redirect ke halaman login
+    if (!token) {
+      return NextResponse.redirect(new URL("/auth/login", req.url));
+    }
+    // Access langsung dari token
+
+    if (req.nextUrl.pathname.startsWith("/book")) {
+      console.log("req.nextUrl.pathname", req.nextUrl.pathname.endsWith("/update"));
+
+      if (req.nextauth.token.role === "member" && req.nextUrl.pathname !== "/book") {
+        return NextResponse.rewrite(new URL("/access", req.url));
+      }
+
+      if (req.nextauth.token.role === "admin") {
+        if (
+          req.nextUrl.pathname === "/book/tambah" &&
+          req.nextauth.token.access.includes("create") === false
+        ) {
+          return NextResponse.rewrite(new URL("/access", req.url));
+        }
+
+        if (
+          req.nextUrl.pathname === "/book/update" &&
+          req.nextauth.token.access.includes("update") === false
+        ) {
+          return NextResponse.rewrite(new URL("/access", req.url));
+        }
+
+        // Admin memiliki akses ke halaman lain di bawah /book
+        return NextResponse.next();
+      }
     }
 
-    return NextResponse.next(); //jika tidak ada token maka redirect ke halaman login
-    
-
-    //tempat kodingnya
+    // Jika semua kondisi terpenuhi, lanjutkan request
+    return NextResponse.next();
   },
   {
     callbacks: {
       authorized: ({ token }) => {
-        if (token) return true; //jika token tidak ada maka tidak bisa redirect ke halaman admin/user
-        return false;
+        return token ? true : false;
       },
     },
     pages: {
@@ -33,5 +54,8 @@ export default withAuth(
     },
   }
 );
- 
-export const config = { matcher: ["/admin", "/admin/:path*", "/belajar"] };
+
+// Konfigurasi matcher
+export const config = {
+  matcher: ["/book/tambah", "/book/update", "/book"],
+};

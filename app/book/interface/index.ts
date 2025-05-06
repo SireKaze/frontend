@@ -23,4 +23,5 @@ export interface BookListFilter extends Partial<Book> {
 }
  
  
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface BookCreatePayload extends Pick<Book, "author" | "title" | "year"> {}

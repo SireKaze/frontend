@@ -3,7 +3,7 @@
 
 import { useFormik, Form, FormikProvider, getIn } from "formik";
 import { useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import * as yup from "yup";
 import { LoginPayload } from "../interface";
@@ -13,7 +13,7 @@ import useAuthModule from "../lib";
 import InputText from './../../component/TextInput';
 import Link from "next/link";
 import { Session } from 'next-auth';
- 
+
 export const registerSchema = yup.object().shape({
   email: yup
     .string()
@@ -28,7 +28,7 @@ export const registerSchema = yup.object().shape({
     .required("Wajib isi")
     .min(8, "Minimal 8 karakater"),
 });
- 
+
 const Login = () => {
     const { useLogin } = useAuthModule();
     const {data: session, status} = useSession();
@@ -99,9 +99,9 @@ const Login = () => {
               messageError={getIn(errors, "password")}
             />
           </section>
-          <section>
+            <section>
             <Button
-            type="submit"
+              type="submit"
               title="Login"
               colorSchema="blue"
               isLoading={isLoading}
@@ -110,7 +110,30 @@ const Login = () => {
             <Link href={"/auth/register"}>
               <Button title="Halaman Register" colorSchema="green" />
             </Link>
-          </section>
+            <Link href={"/auth/forgot-pw"}>
+              <Button title="Lupa Password" colorSchema="red" />
+            </Link>
+            <Button
+              title="Login by Google"
+              colorSchema="red"
+              onClick={() => {
+                signIn("google")
+              }}
+              type="button"
+              isLoading={isLoading}
+              disabled={isLoading}
+            />
+            <Button
+              title="Login by github"
+              colorSchema="gray"
+              onClick={() => {
+                signIn("github")
+              }}
+              type="button"
+              isLoading={isLoading}
+              disabled={isLoading}
+            />
+            </section>
         </Form>
       </FormikProvider>
     </section>
@@ -120,4 +143,3 @@ const Login = () => {
 };
  
 export default Login;
- 

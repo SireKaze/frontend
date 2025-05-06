@@ -11,7 +11,7 @@ const Member = () => {
 
   useEffect(() => {
     if (status === "authenticated" && session?.user.role !== "member") {
-      router.push("/"); // Redirect to home or another page if not a member
+      router.push("/access"); // Redirect to home or another page if not a member
     }
   }, [status, session, router]);
 
@@ -40,6 +40,13 @@ const Member = () => {
             }}
             colorSchema="blue"
             title="Logout"
+          />
+          <Button
+            onClick={() => {
+              router.push('/book');
+            }}
+            colorSchema="green"
+            title="Go to Book Page"
           />
         </>
       )}
